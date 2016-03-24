@@ -22,34 +22,27 @@ public class Teacher extends Person {
         super(user);
     }
 
-    public static ArrayList<Teacher> getAllTeacher() throws SQLException {
-        Connection conn = ConnectionDB.getConnection();
-        ArrayList<Teacher> listTch = new ArrayList<Teacher>();
-        PreparedStatement ck = conn.prepareStatement("select * from Person where position='TEACHER'");
-        ResultSet ck_result = ck.executeQuery();
-        System.out.println(ck_result.next());
-        return listTch;
-    }
-    
     public String createWork(String name, String description, Teacher tch) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ck = conn.prepareStatement("select name"
                 + " from Work where name=?");
         PreparedStatement ps = conn.prepareStatement("INSERT INTO Work"
-                        + "(name, description, status, point, tch ,std) VALUES"
-                        + "(?,?,?,?,?,?)");
+                + "(name, description, status, point, tch ,std) VALUES"
+                + "(?,?,?,?,?,?)");
         ck.setString(1, name);
         ResultSet ck_result = ck.executeQuery();
 
         if (!(ck_result.next())) {
-            for (int i = 0; i < 3; i++) {
+            
+            ArrayList<Student> list = Student.getAllStudent();
+            for (Student std : list) {
+                System.out.println(std);
                 ps.setString(1, name);
                 ps.setString(2, description);
                 ps.setInt(3, 0);
                 ps.setInt(4, 0);
                 ps.setInt(5, this.getId());
-                ps.setInt(6, i);
-
+                ps.setInt(6, std.id);
                 ps.executeUpdate();
             }
             return " Create work : Complete";

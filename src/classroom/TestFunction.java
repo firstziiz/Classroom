@@ -20,10 +20,14 @@ public class TestFunction {
         
         System.out.println(User);
         
-        String a = User.createWork("[INT105] REPORT 1 ", " Lorem Ipsum .... ", User);
-        System.out.println("a is : " + a);
-        
-        ArrayList<Teacher> list = Teacher.getAllTeacher();
+//        String a = User.createWork("[INT105] REPORT 2 ", " Lorem Ipsum .... ", User);
+//        System.out.println("a is : " + a);
+//        
+//        ArrayList<Student> list = Student.getAllStudent();
+//        
+//        for (Student std : list) {
+//            System.out.println(std);
+//        }
         
     }
 }

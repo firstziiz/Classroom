@@ -67,6 +67,16 @@ public class Person {
         return 0;
     }
     
+    public String checkPosition() throws SQLException{
+        Connection conn = ConnectionDB.getConnection();
+        PreparedStatement ps = conn.prepareStatement("select * from Person where user=?");
+        ps.setString(1, user);
+        ResultSet result = ps.executeQuery();
+        result.next();
+        return result.getString("position");
+	
+	
+    }
     // GET and SET
     public int getId() {
         return id;
