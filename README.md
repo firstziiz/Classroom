@@ -3,13 +3,13 @@ Tool works for Student and Teacher. Send, Receive, Store ,and Analytics. by Java
 
 Function :
 
- - Login & Registration
- - Create Works
- - Send Works
- - Check Work and give work's score.
- - Search Works
- - Teacher Analytics Dashboard
- - READ and WRITE file [I/O Function]
+ - Login & Registration System
+ - Create Works `not add in the main function`
+ - Send Works `comming soon`
+ - Check Work and give work's score. `comming soon`
+ - Search Works `comming soon`
+ - Teacher Analytics Dashboard `comming soon`
+ - READ and WRITE file [I/O Function] `comming soon`
  - MySQL Support
 
 ## Requirement
