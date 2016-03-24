@@ -15,15 +15,8 @@ import java.sql.SQLException;
  * @author KS
  */
 public class Student extends Person{
-    int stuid;
     
-    public static int createStudent(String user) throws SQLException {
-        Connection conn = ConnectionDB.getConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO Student"
-		+ "(PERSONUSER) VALUES"
-		+ "(?)");
-        ps.setString(1, user);
-        return ps.executeUpdate();
+    public Student(String user) throws SQLException {
+        super(user);
     }
-    
 }

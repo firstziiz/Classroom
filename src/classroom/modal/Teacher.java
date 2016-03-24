@@ -8,21 +8,53 @@ package classroom.modal;
 import classroom.database.ConnectionDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 /**
  *
  * @author KS
  */
-public class Teacher extends Person{
-    int tchId;
-    
-    public static int createTeacher(String user) throws SQLException {
+public class Teacher extends Person {
+
+    public Teacher(String user) throws SQLException {
+        super(user);
+    }
+
+    public static ArrayList<Teacher> getAllTeacher() throws SQLException {
         Connection conn = ConnectionDB.getConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO Teacher"
-		+ "(PERSONUSER) VALUES"
-		+ "(?)");
-        ps.setString(1, user);
-        return ps.executeUpdate();
+        ArrayList<Teacher> listTch = new ArrayList<Teacher>();
+        PreparedStatement ck = conn.prepareStatement("select * from Person where position='TEACHER'");
+        ResultSet ck_result = ck.executeQuery();
+        System.out.println(ck_result.next());
+        return listTch;
+    }
+    
+    public String createWork(String name, String description, Teacher tch) throws SQLException {
+        Connection conn = ConnectionDB.getConnection();
+        PreparedStatement ck = conn.prepareStatement("select name"
+                + " from Work where name=?");
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO Work"
+                        + "(name, description, status, point, tch ,std) VALUES"
+                        + "(?,?,?,?,?,?)");
+        ck.setString(1, name);
+        ResultSet ck_result = ck.executeQuery();
+
+        if (!(ck_result.next())) {
+            for (int i = 0; i < 3; i++) {
+                ps.setString(1, name);
+                ps.setString(2, description);
+                ps.setInt(3, 0);
+                ps.setInt(4, 0);
+                ps.setInt(5, this.getId());
+                ps.setInt(6, i);
+
+                ps.executeUpdate();
+            }
+            return " Create work : Complete";
+        }
+
+        return " Create work : False";
     }
 }
