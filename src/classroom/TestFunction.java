@@ -27,11 +27,11 @@ public class TestFunction {
 //        String a = User.createWork("[INT105] REPORT 2 ", " Lorem Ipsum .... ", User);
 //        System.out.println("a is : " + a);
 //        
-//        ArrayList<Student> list = Student.getAllStudent();
-//        
-//        for (Student std : list) {
-//            System.out.println(std);
-//        }
+        ArrayList<Student> list = Student.getAllStudent();
+        
+        for (Student std : list) {
+            System.out.println(std);
+        }
         
     }
 }
