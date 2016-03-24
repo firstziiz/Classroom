@@ -16,21 +16,21 @@ import java.util.ArrayList;
  *
  * @author KS
  */
-public class Student extends Person{
-    
+public class Student extends Person {
+
+    // Init Student for USE Function of Student Class
     public Student(String user) throws SQLException {
         super(user);
     }
+
+    // [STATIC] Get All Student on Arraylist
     public static ArrayList<Student> getAllStudent() throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         ArrayList<Student> listStd = new ArrayList<Student>();
         PreparedStatement ck = conn.prepareStatement("select * from Person where position='STUDENT'");
         ResultSet result = ck.executeQuery();
-
         while (result.next()) {
-            
-                listStd.add(new Student(result.getString("user")));
-            
+            listStd.add(new Student(result.getString("user")));
         }
 
         return listStd;

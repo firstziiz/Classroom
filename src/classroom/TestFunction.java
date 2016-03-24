@@ -14,6 +14,10 @@ import java.util.ArrayList;
  * @author KS
  */
 public class TestFunction {
+    
+    // ########################
+    //     # TESTING AREA #
+    // ########################
     public static void main(String[] args) throws SQLException {
     
         Teacher User = new Teacher("teacher");

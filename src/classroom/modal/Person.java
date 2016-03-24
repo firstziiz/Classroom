@@ -23,6 +23,7 @@ public class Person {
     private String name;
     private String position;
 
+    // Init Person by USER form database
     public Person(String user) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ps = conn.prepareStatement("select * from Person where user=?");
@@ -36,7 +37,8 @@ public class Person {
             this.position = rs.getString("position");
         }
     }
-
+    
+    // [STATIC] Check A Person in a database, but has return 'true'
     public static boolean checkPerson(String user, String password) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ps = conn.prepareStatement("select user,pass from Person where user=? and pass=?");
@@ -45,11 +47,11 @@ public class Person {
         ResultSet rs = ps.executeQuery();
         return rs.next();
     }
-
+    
+    // [STATIC] Create Person .. [REGISTER]
     public static int createPerson(String user, String password, String personName, String position) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
-        PreparedStatement ck = conn.prepareStatement("select user"
-                + " from Person where user=?");
+        PreparedStatement ck = conn.prepareStatement("select user from Person where user=?");
         ck.setString(1, user);
         ResultSet ck_result = ck.executeQuery();
 
@@ -67,6 +69,7 @@ public class Person {
         return 0;
     }
     
+    // Check Position of A Person
     public String checkPosition() throws SQLException{
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ps = conn.prepareStatement("select * from Person where user=?");

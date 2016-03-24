@@ -18,10 +18,13 @@ import java.util.*;
  */
 public class Teacher extends Person {
 
+    // Init Teacher for USE Function of Teacher Class
     public Teacher(String user) throws SQLException {
         super(user);
     }
 
+    // CREATE WORKS for All Student in the Database.
+    // note : Works must assign to all of student.
     public String createWork(String name, String description, Teacher tch) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ck = conn.prepareStatement("select name"
@@ -33,7 +36,6 @@ public class Teacher extends Person {
         ResultSet ck_result = ck.executeQuery();
 
         if (!(ck_result.next())) {
-            
             ArrayList<Student> list = Student.getAllStudent();
             for (Student std : list) {
                 System.out.println(std);
