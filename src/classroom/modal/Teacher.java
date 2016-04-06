@@ -52,8 +52,28 @@ public class Teacher extends Person {
 
         return " Create work : False";
     }
+
     
-    public void showWork(){
+    public void approveWork(int score,int workid) throws SQLException {
+        Connection tcud = ConnectionDB.getConnection();
+        PreparedStatement pps = tcud.prepareStatement("UPDATE Work SET status = 2, score = ?  WHERE id =?");
+        pps.setInt(1, score);
+        pps.setInt(2, workid);
+        pps.executeUpdate();
         
     }
+    
+    public ArrayList<Work> showWork() throws SQLException{
+        Connection tcud = ConnectionDB.getConnection();
+        ArrayList<Work> listWork = new ArrayList<Work>();
+        PreparedStatement pps = tcud.prepareStatement("select * from Work where tch =?");
+        pps.setInt(1, id);
+        ResultSet result = pps.executeQuery();
+        while (result.next()){
+            listWork.add(new Work(result.getInt("id")));
+        }
+        return listWork;
+        
+    }
+    
 }

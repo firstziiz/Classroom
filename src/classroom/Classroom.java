@@ -114,7 +114,8 @@ public class Classroom {
             } while (check != 2); // Person Login Success.
 
             login = true; // Person has Login.
-
+            User = new Person(user);
+            
             if (User.checkPosition().equals("TEACHER")) {
                 // Teacher Access
                 Teacher teacher = new Teacher(user);

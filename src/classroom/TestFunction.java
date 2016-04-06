@@ -34,7 +34,9 @@ public class TestFunction {
 //        }
 //        System.out.println(new Student("student1"));
         
-        Work wk = new Work(1);
-        System.out.println(wk);
+        Teacher ch = new Teacher("teacher");
+        ch.approveWork(8, 1);
+        
+        
     }
 }
