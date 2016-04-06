@@ -121,10 +121,6 @@ public class Person {
     public String toString() {
         return "Person{" + "id=" + id + ", user=" + user + ", pass=" + pass + ", name=" + name + ", position=" + position + '}';
     }
-
-    public void showWork() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 }

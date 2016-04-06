@@ -34,7 +34,12 @@ public class TestFunction {
 //        }
 //        System.out.println(new Student("student1"));
         
-        Work wk = new Work(1);
-        System.out.println(wk);
+        Student sd = new Student("student1");
+        
+        ArrayList<Work> list = sd.showWork();
+
+        for (Work work : list) {
+            System.out.println(work);
+        }
     }
 }

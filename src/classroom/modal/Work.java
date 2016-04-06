@@ -21,7 +21,7 @@ public class Work {
     String name;
     String desc;
     int status;
-    int point;
+    int score;
     int std;
     int tch;
     String path;
@@ -37,7 +37,7 @@ public class Work {
             this.name = rs.getString("name");
             this.desc = rs.getString("description");
             this.status = rs.getInt("status");
-            this.point = rs.getInt("point");
+            this.score = rs.getInt("score");
             this.tch = rs.getInt("tch");
             this.std = rs.getInt("std");
             this.path = rs.getString("path");
@@ -58,7 +58,7 @@ public class Work {
 
     @Override
     public String toString() {
-        return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", point=" + point + ", std=" + std + ", tch=" + tch + ", path=" + path + '}';
+        return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", path=" + path + '}';
     }
     
     

@@ -114,10 +114,12 @@ public class Classroom {
             } while (check != 2); // Person Login Success.
 
             login = true; // Person has Login.
-
+            
+            User = new Person(user);
+            
             if (User.checkPosition().equals("TEACHER")) {
                 // Teacher Access
-                Teacher teacher = new Teacher(user);
+                Teacher tch = new Teacher(user);
                 do {
                     System.out.println(" -------------------");
                     System.out.println("# TEACHER DASHBOARD #");
@@ -137,7 +139,7 @@ public class Classroom {
                     } while (check <= 1 && check >= 4);
                     // 1 : Show Works
                     if (check == 1) {
-                        teacher.showWork();
+                        tch.showWork();
                     }
                     // 2 : Check Works
                     else if (check == 2) {
@@ -146,7 +148,7 @@ public class Classroom {
                     }
                     // 3 : Analyrics Board
                     else if (check == 3) {
-                        System.out.println(" -- I'm in 'Analyrics Board [Function]'");
+                        System.out.println(" -- I'm in 'Create Work [Function]'");
                         System.out.println(" -- wait for develop\n");
                     }
                     // 4 : logout
@@ -158,12 +160,12 @@ public class Classroom {
                 } while (true);
             } else {
                 // Student Access
-                User = new Student(user);
+                Student std = new Student(user);
                 do {
                     System.out.println(" -------------------");
                     System.out.println("# Student DASHBOARD #");
                     System.out.println("Hi, " + User.getName());
-                    System.out.println("Press 1 : Show  Works");
+                    System.out.println("Press 1 : Show Works");
                     System.out.println("Press 2 : Sent Works");
                     System.out.println("Press 3 : Logout");
                     do {
@@ -177,8 +179,12 @@ public class Classroom {
                     } while (check <= 1 && check >= 3);
                     // 1 : Show Works
                     if (check == 1) {
-                        System.out.println(" -- I'm in 'Show Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        ArrayList<Work> list = std.showWork();
+                        System.out.println("------- my work -------");
+                        for (Work w : list) {
+                            System.out.println(w);
+                        }
+                        System.out.println("-----------------------");
                     }
                     // 2 : Sent Works
                     else if (check == 2) {

@@ -35,4 +35,24 @@ public class Student extends Person {
 
         return listStd;
     }
+    
+    public ArrayList<Work> showWork() throws SQLException {
+        Connection conn = ConnectionDB.getConnection();
+        ArrayList<Work> listWork = new ArrayList<Work>();
+        PreparedStatement ck = conn.prepareStatement("select * from Work where std = ?");
+        ck.setInt(1, id);
+        ResultSet result = ck.executeQuery();
+        while (result.next()) {
+            listWork.add(new Work(result.getInt("id")));
+        }
+        return listWork;
+    }
+    
+    public void sentWork(String answer , int workid) throws SQLException{
+        Connection conn = ConnectionDB.getConnection();
+        PreparedStatement ps = conn.prepareStatement("update Work SET status = 1 , answer = ? where id = ?");
+        ps.setString(1, answer);
+        ps.setInt(2, workid);
+        ps.executeUpdate();
+    }
 }

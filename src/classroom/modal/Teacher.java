@@ -25,7 +25,7 @@ public class Teacher extends Person {
 
     // CREATE WORKS for All Student in the Database.
     // note : Works must assign to all of student.
-    public String createWork(String name, String description, Teacher tch) throws SQLException {
+    public String createWork(String name, String description) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ck = conn.prepareStatement("select name"
                 + " from Work where name=?");
