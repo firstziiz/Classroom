@@ -36,10 +36,19 @@ public class Student extends Person {
         return listStd;
     }
     
-    public ArrayList<Work> showWork() throws SQLException {
+    public ArrayList<Work> showWork(String command) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
-        PreparedStatement ck = conn.prepareStatement("select * from Work where std = ?");
+        PreparedStatement ck;
+        if (command == "all") {
+            ck = conn.prepareStatement("select * from Work where std = ?");
+        }else if (command == "sent"){
+            ck = conn.prepareStatement("select * from Work where std = ? and status = 1");
+        }else if (command == "unsent"){
+            ck = conn.prepareStatement("select * from Work where std = ? and status = 0");
+        }else{
+            return null;
+        }
         ck.setInt(1, id);
         ResultSet result = ck.executeQuery();
         while (result.next()) {

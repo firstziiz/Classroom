@@ -17,14 +17,14 @@ import java.util.ArrayList;
  * @author KS
  */
 public class Work {
-    int id;
-    String name;
-    String desc;
-    int status;
-    int score;
-    int std;
-    int tch;
-    String path;
+    private int id;
+    private String name;
+    private String desc;
+    private int status;
+    private int score;
+    private int std;
+    private int tch;
+    private String path;
     
     
     public Work(int id) throws SQLException{
@@ -56,6 +56,40 @@ public class Work {
         return listWrk;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getStd() {
+        return std;
+    }
+
+    public int getTch() {
+        return tch;
+    }
+
+    public String getPath() {
+        return path;
+    }
+    
+    
+    
     @Override
     public String toString() {
         return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", path=" + path + '}';

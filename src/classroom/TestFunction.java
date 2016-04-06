@@ -34,9 +34,9 @@ public class TestFunction {
 //        }
 //        System.out.println(new Student("student1"));
         
-        Student sd = new Student("student1");
+        Student sd = new Student("student");
         
-        ArrayList<Work> list = sd.showWork();
+        ArrayList<Work> list = sd.showWork("unsent");
 
         for (Work work : list) {
             System.out.println(work);

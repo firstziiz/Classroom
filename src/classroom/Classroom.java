@@ -139,7 +139,12 @@ public class Classroom {
                     } while (check <= 1 && check >= 4);
                     // 1 : Show Works
                     if (check == 1) {
-                        tch.showWork();
+                        ArrayList<Work> list = tch.showWork();
+                        System.out.println("------- my work -------");
+                        for (Work w : list) {
+                            System.out.println(w);
+                        }
+                        System.out.println("-----------------------");
                     }
                     // 2 : Check Works
                     else if (check == 2) {
@@ -179,8 +184,8 @@ public class Classroom {
                     } while (check <= 1 && check >= 3);
                     // 1 : Show Works
                     if (check == 1) {
-                        ArrayList<Work> list = std.showWork();
-                        System.out.println("------- my work -------");
+                        ArrayList<Work> list = std.showWork("all");
+                        System.out.println("------- My Work -------");
                         for (Work w : list) {
                             System.out.println(w);
                         }
@@ -188,8 +193,23 @@ public class Classroom {
                     }
                     // 2 : Sent Works
                     else if (check == 2) {
-                        System.out.println(" -- I'm in 'Sent Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        ArrayList<Work> list = std.showWork("unsent");
+                        if (list.size() > 0) {
+                            System.out.println("------- Sent Work -------");
+                            int i = 1;
+                            for (Work w : list) {
+                                System.out.println(i +") " +w);
+                                i++;
+                            }
+                            System.out.print("------- Select ID of Work : ");
+                            int select = sc.nextInt();
+                            System.out.println("--- Typing Answer ---");
+                            String answer = sc.next();
+                            std.sentWork(answer , list.get(select-1).getId());
+                            System.out.println("Sent Complete ~");
+                        }else{
+                            System.out.println("You already send you work."); // check sentense.
+                        }
                     }
                     // 3 : logout
                     else {
