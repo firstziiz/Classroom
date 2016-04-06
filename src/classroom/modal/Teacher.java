@@ -52,4 +52,8 @@ public class Teacher extends Person {
 
         return " Create work : False";
     }
+    
+    public void showWork(){
+        
+    }
 }

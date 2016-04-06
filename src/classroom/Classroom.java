@@ -114,11 +114,10 @@ public class Classroom {
             } while (check != 2); // Person Login Success.
 
             login = true; // Person has Login.
-            User = new Person(user);
 
             if (User.checkPosition().equals("TEACHER")) {
                 // Teacher Access
-                User = new Teacher(user);
+                Teacher teacher = new Teacher(user);
                 do {
                     System.out.println(" -------------------");
                     System.out.println("# TEACHER DASHBOARD #");
@@ -138,8 +137,7 @@ public class Classroom {
                     } while (check <= 1 && check >= 4);
                     // 1 : Show Works
                     if (check == 1) {
-                        System.out.println(" -- I'm in 'Show Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        teacher.showWork();
                     }
                     // 2 : Check Works
                     else if (check == 2) {

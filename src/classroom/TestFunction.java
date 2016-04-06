@@ -19,19 +19,22 @@ public class TestFunction {
     //     # TESTING AREA #
     // ########################
     public static void main(String[] args) throws SQLException {
-    
-        Teacher User = new Teacher("teacher");
-        
-        System.out.println(User);
-        
-//        String a = User.createWork("[INT105] REPORT 2 ", " Lorem Ipsum .... ", User);
+//    
+//        Teacher User = new Teacher("teacher");
+//        
+//        System.out.println(User);
+//        
+//        String a = User.createWork("[INT105] REPORT 3 ", " Lorem Ipsum ....  nothing", User);
 //        System.out.println("a is : " + a);
 //        
-        ArrayList<Student> list = Student.getAllStudent();
+//        ArrayList<Student> list = Student.getAllStudent();
+//        
+//        for (Student std : list) {
+//            System.out.println(std);
+//        }
+//        System.out.println(new Student("student1"));
         
-        for (Student std : list) {
-            System.out.println(std);
-        }
-        
+        Work wk = new Work(1);
+        System.out.println(wk);
     }
 }

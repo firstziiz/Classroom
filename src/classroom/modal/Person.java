@@ -49,7 +49,7 @@ public class Person {
     }
     
     // [STATIC] Create Person .. [REGISTER]
-    public static int createPerson(String user, String password, String personName, String position) throws SQLException {
+    public static void createPerson(String user, String password, String personName, String position) throws SQLException {
         Connection conn = ConnectionDB.getConnection();
         PreparedStatement ck = conn.prepareStatement("select user from Person where user=?");
         ck.setString(1, user);
@@ -63,10 +63,8 @@ public class Person {
             ps.setString(2, password);
             ps.setString(3, personName);
             ps.setString(4, position);
-            return ps.executeUpdate();
-        }
-
-        return 0;
+            ps.executeUpdate();
+        }        
     }
     
     // Check Position of A Person
@@ -102,14 +100,10 @@ public class Person {
     }
 //    # use : update statement
 //    
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public void setUser(String user) {
-//        this.user = user;
-//    }
-//
+//    public void set(String col, String res){
+//      "update 'col' from Person value (res) where user='this.user'"
+//        }
+//    
 //    public void setPass(String pass) {
 //        this.pass = pass;
 //    }
@@ -126,6 +120,10 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" + "id=" + id + ", user=" + user + ", pass=" + pass + ", name=" + name + ", position=" + position + '}';
+    }
+
+    public void showWork() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
