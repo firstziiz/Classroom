@@ -41,5 +41,6 @@ public class TestFunction {
         for (Work work : list) {
             System.out.println(work);
         }
+
     }
 }

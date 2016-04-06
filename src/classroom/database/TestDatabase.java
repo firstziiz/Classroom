@@ -18,7 +18,7 @@ public class TestDatabase {
         PreparedStatement ps = conn.prepareStatement("select * from Person");
         ResultSet rs = ps.executeQuery();
         rs.next();
-        String a = rs.getString("username");
+        String a = rs.getString("user");
         System.out.println(a);
          
     }
