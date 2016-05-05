@@ -90,5 +90,37 @@ public class Teacher extends Person {
         pps.setInt(2, id);
         pps.executeUpdate();
     }
-    
+ 
+    public void analytics() throws SQLException {
+        Connection tcud = ConnectionDB.getConnection();
+        ArrayList<Work> list = new ArrayList<Work>();
+        PreparedStatement pps = tcud.prepareStatement("select * from Work where tch =? ");
+        pps.setInt(1, id);
+        ResultSet result = pps.executeQuery();
+        
+        int unsent=0,sented=0,approve=0;
+        while (result.next()){
+            Work work = new Work(result.getInt("id"));
+            list.add(work);
+            if(work.getStatus() == 0) unsent++;
+            if(work.getStatus() == 1) sented++;
+            if(work.getStatus() == 2) approve++;
+        }
+        
+        System.out.println("[ Analytics Dashboard ]");
+        System.out.println("-------------");
+        System.out.println("# OVERVIEW #");
+        System.out.println("amount of work is " +list.size() + " work.");
+        System.out.println("Unsent ::   " + unsent);
+        System.out.println("Sented ::   " + sented);
+        System.out.println("Approve ::  " + approve);
+        System.out.println("# WORK #");
+        int i = 1;
+        for (Work w : list) {
+                System.out.print(i +") " +w+ " [" );
+                System.out.print("]\n");
+                i++;
+            }
+        
+    }
 }
