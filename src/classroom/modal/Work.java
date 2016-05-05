@@ -24,6 +24,7 @@ public class Work {
     private int score;
     private int std;
     private int tch;
+    private String answer;
     private String path;
     
     
@@ -40,6 +41,7 @@ public class Work {
             this.score = rs.getInt("score");
             this.tch = rs.getInt("tch");
             this.std = rs.getInt("std");
+            this.answer = rs.getString("answer");
             this.path = rs.getString("path");
         }
 
@@ -84,17 +86,17 @@ public class Work {
         return tch;
     }
 
+    public String getAnswer() {
+        return answer;
+    }
+
     public String getPath() {
         return path;
     }
-    
-    
-    
+
     @Override
     public String toString() {
-        return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", path=" + path + '}';
+        return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", answer=" + answer + ", path=" + path + '}';
     }
-    
-    
     
 }

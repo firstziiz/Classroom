@@ -125,9 +125,11 @@ public class Classroom {
                     System.out.println("# TEACHER DASHBOARD #");
                     System.out.println("Hi, " + User.getName());
                     System.out.println("Press 1 - Show  Works");
-                    System.out.println("Press 2 - Check Works");
-                    System.out.println("Press 3 - Analytics Board");
-                    System.out.println("Press 4 - Logout");
+                    System.out.println("Press 2 - Create  Works");
+                    System.out.println("Press 3 - Check Works");
+                    System.out.println("Press 4 - Remove  Works");
+                    System.out.println("Press 5 - Analytics Board");
+                    System.out.println("Press 6 - Logout");
                     do {
                         try {
                             System.out.print("Enter : ");
@@ -136,27 +138,37 @@ public class Classroom {
                             System.out.println("> Invalid Input");
                             sc.next();
                         }
-                    } while (check <= 1 && check >= 4);
+                    } while (check <= 1 && check >= 6);
                     // 1 : Show Works
                     if (check == 1) {
                         ArrayList<Work> list = tch.showWork();
-                        System.out.println("------- my work -------");
+                        System.out.println("------- My Work -------");
                         for (Work w : list) {
                             System.out.println(w);
                         }
                         System.out.println("-----------------------");
                     }
-                    // 2 : Check Works
+                    // 2 : Create Works
                     else if (check == 2) {
+                        System.out.println(" -- I'm in 'Create Works [Function]'");
+                        System.out.println(" -- wait for develop\n");
+                    }
+                    // 3 : Check Works
+                    else if (check == 3) {
                         System.out.println(" -- I'm in 'Check Works [Function]'");
                         System.out.println(" -- wait for develop\n");
                     }
-                    // 3 : Analyrics Board
-                    else if (check == 3) {
-                        System.out.println(" -- I'm in 'Create Work [Function]'");
+                    // 4 : Remove Works
+                    else if (check == 4) {
+                        System.out.println(" -- I'm in 'Remove Works [Function]'");
                         System.out.println(" -- wait for develop\n");
                     }
-                    // 4 : logout
+                    // 5 : Analyrics Board
+                    else if (check == 5) {
+                        System.out.println(" -- I'm in 'Analyrics Board [Function]'");
+                        System.out.println(" -- wait for develop\n");
+                    }
+                    // 6 : logout
                     else {
                         System.out.println("Bye.\n");
                         login = false;
@@ -167,7 +179,7 @@ public class Classroom {
                 // Student Access
                 Student std = new Student(user);
                 do {
-                    System.out.println(" -------------------");
+                    System.out.println("---------------------");
                     System.out.println("# Student DASHBOARD #");
                     System.out.println("Hi, " + User.getName());
                     System.out.println("Press 1 : Show Works");
@@ -182,6 +194,7 @@ public class Classroom {
                             sc.next();
                         }
                     } while (check <= 1 && check >= 3);
+                    
                     // 1 : Show Works
                     if (check == 1) {
                         ArrayList<Work> list = std.showWork("all");
@@ -191,6 +204,7 @@ public class Classroom {
                         }
                         System.out.println("-----------------------");
                     }
+                    
                     // 2 : Sent Works
                     else if (check == 2) {
                         ArrayList<Work> list = std.showWork("unsent");
@@ -203,14 +217,32 @@ public class Classroom {
                             }
                             System.out.print("------- Select ID of Work : ");
                             int select = sc.nextInt();
+                            
+                            // Typing Answer .
                             System.out.println("--- Typing Answer ---");
+                            System.out.println("ps. only one line.");
+                            System.out.print("Answer : ");
                             String answer = sc.next();
-                            std.sentWork(answer , list.get(select-1).getId());
-                            System.out.println("Sent Complete ~");
+                            
+                            // Confirm
+                            System.out.println("-------------------------");
+                            System.out.println("Work Name : " + list.get(select-1).getName());
+                            System.out.println("Assign by : " + list.get(select-1).getTch());
+                            System.out.println("Answer : " + answer);
+                            System.out.println("-------------------------");
+                            System.out.print("Confirm ? (yes) : ");
+                            String chk = sc.next();
+                            if (chk.equals("yes")) {
+                                std.sentWork(answer , list.get(select-1).getId());
+                                System.out.println("Sent Complete, You can check your work on 'Show Work' function.");
+                            }else{
+                                System.out.println(".. You are Cancel ..");
+                            }
                         }else{
-                            System.out.println("You already send you work."); // check sentense.
+                            System.out.println("You already send you works."); // check sentense.
                         }
                     }
+                    
                     // 3 : logout
                     else {
                         System.out.println("Bye.\n");
@@ -223,4 +255,10 @@ public class Classroom {
 
         // Classroom by First , Fluke , Stamp !
     }
+    
+    // ## Method Zone ##
+    // Student Method
+    
+    // Teacher Method
+    
 }
