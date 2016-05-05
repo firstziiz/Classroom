@@ -30,8 +30,8 @@ public class Teacher extends Person {
         PreparedStatement ck = conn.prepareStatement("select name"
                 + " from Work where name=?");
         PreparedStatement ps = conn.prepareStatement("INSERT INTO Work"
-                + "(name, description, status, point, tch ,std) VALUES"
-                + "(?,?,?,?,?,?)");
+                + "(name, description, status, answer, score, tch ,std) VALUES"
+                + "(?,?,?,?,?,?,?)");
         ck.setString(1, name);
         ResultSet ck_result = ck.executeQuery();
 
@@ -42,9 +42,10 @@ public class Teacher extends Person {
                 ps.setString(1, name);
                 ps.setString(2, description);
                 ps.setInt(3, 0);
-                ps.setInt(4, 0);
-                ps.setInt(5, this.getId());
-                ps.setInt(6, std.id);
+                ps.setString(4, "");
+                ps.setInt(5, 0);
+                ps.setInt(6, this.getId());
+                ps.setInt(7, std.id);
                 ps.executeUpdate();
             }
             return " Create work : Complete";
@@ -53,7 +54,6 @@ public class Teacher extends Person {
         return " Create work : False";
     }
 
-    
     public void approveWork(int score,int workid) throws SQLException {
         Connection tcud = ConnectionDB.getConnection();
         PreparedStatement pps = tcud.prepareStatement("UPDATE Work SET status = 2, score = ?  WHERE id =?");
@@ -63,10 +63,17 @@ public class Teacher extends Person {
         
     }
     
-    public ArrayList<Work> showWork() throws SQLException{
+    public ArrayList<Work> showWork(String command) throws SQLException{
         Connection tcud = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
-        PreparedStatement pps = tcud.prepareStatement("select * from Work where tch =?");
+        PreparedStatement pps;
+        if(command.equals("all")){
+            pps = tcud.prepareStatement("select * from Work where tch =?");
+        }else if (command.equals("sent")){
+            pps = tcud.prepareStatement("select * from Work where tch =? and status = 1");
+        }else{
+            return null;
+        }
         pps.setInt(1, id);
         ResultSet result = pps.executeQuery();
         while (result.next()){
@@ -74,6 +81,14 @@ public class Teacher extends Person {
         }
         return listWork;
         
+    }
+    
+    public void removeWork(int id) throws SQLException {
+        Connection tcud = ConnectionDB.getConnection();
+        PreparedStatement pps = tcud.prepareStatement("delete from Work where tch =? and id = ?");
+        pps.setInt(1, this.getId());
+        pps.setInt(2, id);
+        pps.executeUpdate();
     }
     
 }

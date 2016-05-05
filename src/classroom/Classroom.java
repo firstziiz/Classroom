@@ -141,7 +141,7 @@ public class Classroom {
                     } while (check <= 1 && check >= 6);
                     // 1 : Show Works
                     if (check == 1) {
-                        ArrayList<Work> list = tch.showWork();
+                        ArrayList<Work> list = tch.showWork("all");
                         System.out.println("------- My Work -------");
                         for (Work w : list) {
                             System.out.println(w);
@@ -150,18 +150,78 @@ public class Classroom {
                     }
                     // 2 : Create Works
                     else if (check == 2) {
-                        System.out.println(" -- I'm in 'Create Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        System.out.println("------- Create Work -------");
+                        System.out.print("Enter work name : ");
+                        String workName = sc.next();
+                        System.out.print("Enter descrition : ");
+                        String workDesc = sc.next();
+                        
+                        // Confirm
+                        System.out.println("------- Confirm Work -------");
+                        System.out.println("Work : " + workName);
+                        System.out.println("Description : " + workDesc);
+                        System.out.println("Assign for "+ "" + " Students");
+                        System.out.println("----------------------------");
+                        System.out.print("Confirm ? (typing 'yes') : ");
+                        String chk = sc.next();
+                        if (chk.equals("yes")) {
+                            tch.createWork(workName, workDesc);
+                            System.out.println("Create Work Complete, You can check your work on 'Show Work' function.");
+                        }else{
+                            System.out.println(".. You are Cancel ..");
+                        }
                     }
                     // 3 : Check Works
                     else if (check == 3) {
-                        System.out.println(" -- I'm in 'Check Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        ArrayList<Work> list = tch.showWork("sent");
+                        if (list.size() > 0) {
+                            System.out.println("------- Sented Work -------");
+                            int i = 1;
+                            for (Work w : list) {
+                                System.out.println(i +") " +w);
+                                i++;
+                            }
+                            System.out.print("------- Select ID of Work : ");
+                            int select = sc.nextInt();
+                            
+                            // Typing Answer .
+                            System.out.println("--- APPROVE ---");
+                            System.out.println("Work Name : " + list.get(select-1).getName());
+                            System.out.println("Sent by : " + list.get(select-1).getStd());
+                            System.out.println("Answer : " + list.get(select-1).getAnswer());
+                            System.out.print("Point : ");
+                            int point = sc.nextInt();
+                            
+                            // Confirm
+                            System.out.println("-------------------------");
+                            System.out.println("Work Name : " + list.get(select-1).getName());
+                            System.out.println("Answer : " + list.get(select-1).getAnswer());
+                            System.out.println("Point : " + point);
+                            System.out.println("-------------------------");
+                            System.out.print("Confirm ? (typing 'yes') : ");
+                            String chk = sc.next();
+                            if (chk.equals("yes")) {
+                                tch.approveWork(point, list.get(select-1).getId());
+                                System.out.println("Approve Complete, You can check your work on 'Show Work' function.");
+                            }else{
+                                System.out.println(".. You are Cancel ..");
+                            }
+                        }else{
+                            System.out.println("You already send you works."); // check sentense.
+                        }
                     }
                     // 4 : Remove Works
                     else if (check == 4) {
-                        System.out.println(" -- I'm in 'Remove Works [Function]'");
-                        System.out.println(" -- wait for develop\n");
+                        ArrayList<Work> list = tch.showWork("all");
+                        int i = 1;
+                        for (Work w : list) {
+                                System.out.println(i +") " +w);
+                                i++;
+                            }
+                        System.out.print("------- Select ID of Work : ");
+                        int select = sc.nextInt();
+                         tch.removeWork(list.get(select-1).getId());
+                        System.out.println("Remove Work Complete, You can check your work on 'Show Work' function.");
                     }
                     // 5 : Analyrics Board
                     else if (check == 5) {
@@ -230,7 +290,7 @@ public class Classroom {
                             System.out.println("Assign by : " + list.get(select-1).getTch());
                             System.out.println("Answer : " + answer);
                             System.out.println("-------------------------");
-                            System.out.print("Confirm ? (yes) : ");
+                            System.out.print("Confirm ? (typing 'yes') : ");
                             String chk = sc.next();
                             if (chk.equals("yes")) {
                                 std.sentWork(answer , list.get(select-1).getId());
@@ -254,11 +314,7 @@ public class Classroom {
         } while (login != true);
 
         // Classroom by First , Fluke , Stamp !
+
     }
-    
-    // ## Method Zone ##
-    // Student Method
-    
-    // Teacher Method
     
 }
