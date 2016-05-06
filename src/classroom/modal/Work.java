@@ -96,7 +96,16 @@ public class Work {
 
     @Override
     public String toString() {
-        return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", answer=" + answer + ", path=" + path + '}';
-    }
+       // return "Work{" + "id=" + id + ", name=" + name + ", desc=" + desc + ", status=" + status + ", score=" + score + ", std=" + std + ", tch=" + tch + ", answer=" + answer +  '}';
+        if (status==0){
+            return " "+name+"  | "+"Description : "+desc+" | "+"Teacher : "+tch+" | "+"Student : "+std+" | "+"Status : Unsent" ;
+            
+        }else if(status==1){
+            return " "+name+"  | "+"Description : "+desc+" | "+"Teacher : "+tch+" | "+"Student : "+std+" | "+"Status : Sent .. wait for approve"+" | "+"Answer : "+answer ;
+        }else{        
+            return " "+name+"  | "+"Description : "+desc+" | "+"Teacher : "+tch+" | "+"Student : "+std+" | "+"Status : "+status+" | "+"Answer : "+answer+" | score : "+score;
+        }
+        
+}
     
 }

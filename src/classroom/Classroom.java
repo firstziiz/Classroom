@@ -6,7 +6,6 @@
 package classroom;
 
 import classroom.modal.*;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -20,7 +19,7 @@ public class Classroom {
      * @param args the command line arguments
      * @throws java.sql.SQLException
      */
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException {
 
         // Setting .
         Scanner sc = new Scanner(System.in);
@@ -104,7 +103,7 @@ public class Classroom {
                         pass = sc.next();
 
                         if (Person.checkPerson(user, pass)) {
-                            System.out.println("> Login Success");
+                            System.out.println("> Login Success\n");
                             check = 2;
                         } else {
                             System.out.println("> Invalid Username/Password");
@@ -115,6 +114,7 @@ public class Classroom {
             } while (check != 2); // Person Login Success.
 
             login = true; // Person has Login.
+            
             User = new Person(user);
             
             if (User.checkPosition().equals("TEACHER")) {
@@ -142,9 +142,13 @@ public class Classroom {
                     // 1 : Show Works
                     if (check == 1) {
                         ArrayList<Work> list = tch.showWork("all");
-                        System.out.println("------- My Work -------");
+                        System.out.println("▇▇▇▇▇▇▇▇▇ My Work ▇▇▇▇▇▇▇▇▇");
+                        System.out.println("◤                         ◥"+"\n"+"  You have "+list.size()+
+                                            " of works.  "+"\n"+"◣                         ◢"+"\n");
+                        int i = 1;
                         for (Work w : list) {
-                            System.out.println(w);
+                            System.out.println(i+") "+w);
+                            i++;
                         }
                         System.out.println("-----------------------");
                     }
@@ -153,18 +157,21 @@ public class Classroom {
                         System.out.println("------- Create Work -------");
                         System.out.print("Enter work name : ");
                         String workName = sc.next();
-                        System.out.print("Enter descrition : ");
-                        String workDesc = sc.next();
+                        System.out.print("Enter descrition of work : ");
+                        sc.next();
+                        String workDesc = sc.nextLine();
                         
                         // Confirm
                         System.out.println("------- Confirm Work -------");
+                        System.out.println("◤                         ◥");
                         System.out.println("Work : " + workName);
                         System.out.println("Description : " + workDesc);
                         System.out.println("Assign for "+ "" + " Students");
+                        System.out.println("◣                         ◢");
                         System.out.println("----------------------------");
-                        System.out.print("Confirm ? (typing 'yes' or 'y') : ");
+                        System.out.print("Confirm ? (typing 'yes') : ");
                         String chk = sc.next();
-                        if (chk.equals("yes") || chk.equals("y")) {
+                        if (chk.equals("yes")) {
                             tch.createWork(workName, workDesc);
                             System.out.println("Create Work Complete, You can check your work on 'Show Work' function.");
                         }else{
@@ -198,9 +205,9 @@ public class Classroom {
                             System.out.println("Answer : " + list.get(select-1).getAnswer());
                             System.out.println("Point : " + point);
                             System.out.println("-------------------------");
-                            System.out.print("Confirm ? (typing 'yes' or 'y') : ");
+                            System.out.print("Confirm ? (typing 'yes') : ");
                             String chk = sc.next();
-                            if (chk.equals("yes") || chk.equals("y")) {
+                            if (chk.equals("yes")) {
                                 tch.approveWork(point, list.get(select-1).getId());
                                 System.out.println("Approve Complete, You can check your work on 'Show Work' function.");
                             }else{
@@ -225,7 +232,8 @@ public class Classroom {
                     }
                     // 5 : Analyrics Board
                     else if (check == 5) {
-                        tch.analytics();
+                        System.out.println(" -- I'm in 'Analyrics Board [Function]'");
+                        System.out.println(" -- wait for develop\n");
                     }
                     // 6 : logout
                     else {
@@ -238,7 +246,6 @@ public class Classroom {
                 // Student Access
                 Student std = new Student(user);
                 do {
-                    System.out.println("");
                     System.out.println("---------------------");
                     System.out.println("# Student DASHBOARD #");
                     System.out.println("Hi, " + User.getName());
@@ -258,17 +265,22 @@ public class Classroom {
                     // 1 : Show Works
                     if (check == 1) {
                         ArrayList<Work> list = std.showWork("all");
-                        System.out.println("------ My Work ------");
+                        System.out.println("------- My Work -------");
+                        System.out.println("◤                         ◥"+"\n"+"  You have "+list.size()+
+                                            " of works.  "+"\n"+"◣                         ◢"+"\n");
+                        int i =1;
                         for (Work w : list) {
-                            System.out.println(w);
+                            System.out.println(i+") "+w);
+                            i++;
                         }
+                        System.out.println("-----------------------");
                     }
                     
                     // 2 : Sent Works
                     else if (check == 2) {
                         ArrayList<Work> list = std.showWork("unsent");
                         if (list.size() > 0) {
-                            System.out.println("----- Sent Work -----");
+                            System.out.println("------- Sent Work -------");
                             int i = 1;
                             for (Work w : list) {
                                 System.out.println(i +") " +w);
@@ -278,23 +290,20 @@ public class Classroom {
                             int select = sc.nextInt();
                             
                             // Typing Answer .
-                            System.out.println("-------------------------");
-                            System.out.println("Work Name : " + list.get(select-1).getName());
-                            System.out.println("Description : " + list.get(select-1).getDesc());
                             System.out.println("--- Typing Answer ---");
-                            System.out.println("ps. only one line.");
+                            System.out.println("ps. write only one line.");
                             System.out.print("Answer : ");
                             String answer = sc.next();
                             
                             // Confirm
-                            System.out.println("---------------------");
+                            System.out.println("-------------------------");
                             System.out.println("Work Name : " + list.get(select-1).getName());
                             System.out.println("Assign by : " + list.get(select-1).getTch());
                             System.out.println("Answer : " + answer);
-                            System.out.println("---------------------");
-                            System.out.print("Confirm ? (typing 'yes' or 'y') : ");
+                            System.out.println("-------------------------");
+                            System.out.print("Confirm ? (typing 'yes') : ");
                             String chk = sc.next();
-                            if (chk.equals("yes") || chk.equals("y")) {
+                            if (chk.equals("yes")) {
                                 std.sentWork(answer , list.get(select-1).getId());
                                 System.out.println("Sent Complete, You can check your work on 'Show Work' function.");
                             }else{
@@ -318,4 +327,5 @@ public class Classroom {
         // Classroom by First , Fluke , Stamp !
 
     }
+    
 }
