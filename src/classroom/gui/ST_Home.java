@@ -5,7 +5,11 @@
  */
 package classroom.gui;
 
+import classroom.database.ConnectionDB;
 import classroom.modal.Student;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,10 +25,36 @@ public class ST_Home extends javax.swing.JFrame {
     /**
      * Creates new form ST_Home
      */
-    public ST_Home(Student st) {
+    public ST_Home(Student st) throws SQLException {
         initComponents();
         this.std = st;
         this.jLabel2.setText("Hi, "+std.getName());
+        this.jLabel3.setText("WORK: "+ countW("all") + 
+                         ", UNSENT: "+countW("unsent")+
+                         ", PENDING: "+countW("pending")+
+                         ", APPROVE : "+countW("approve"));
+    }
+    
+    private int countW(String command) throws SQLException{
+        int count = 0;
+        Connection tcud = ConnectionDB.getConnection();
+        PreparedStatement pps;
+        if (command.equals("all")) {
+            pps = tcud.prepareStatement("select * from Work where std=?");
+            pps.setInt(1, ST_Home.std.getId());
+        }else{
+            pps = tcud.prepareStatement("select * from Work where std=? and status=?");
+            pps.setInt(1, ST_Home.std.getId());
+            if(command.equals("unsent")) pps.setInt(2, 0);
+            else if(command.equals("pending")) pps.setInt(2, 1);
+            else pps.setInt(2, 2);
+        }
+        ResultSet result = pps.executeQuery();
+        while (result.next()) {
+            count++;
+        }
+        tcud.close();
+        return count;
     }
 
     /**
@@ -41,11 +71,11 @@ public class ST_Home extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Student Home");
         setMaximumSize(new java.awt.Dimension(2000000000, 2000000000));
-        setPreferredSize(new java.awt.Dimension(350, 350));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setText("'STUDENT'");
@@ -72,62 +102,89 @@ public class ST_Home extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Hi, Student");
+
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("WORK: 123 UNSENT: 56 PENDING: 10 APPROVE : 57");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(136, 136, 136)
-                .addComponent(jLabel2)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)))
+                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(26, 26, 26)
+                            .addComponent(jLabel1))))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        ST_SEND ss = new ST_SEND();
-        ss.setVisible(true);
-        this.setVisible(false);
+        try {
+            // SENT BUTTON
+            ST_SEND ss = new ST_SEND();
+            ss.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(ST_Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showConfirmDialog(null, "Are you sure ?");
-        System.exit(0);
+        // Logout BUTTON
+        String message = " Are you sure ? ";
+        String title = "LOGOUT";
+        int chk = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.WARNING_MESSAGE , JOptionPane.YES_NO_OPTION);
+        if (chk == JOptionPane.YES_OPTION) {
+            Classroom cs = new Classroom();
+            cs.setVisible(true);
+            this.setVisible(false);
+        }else{
+            
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        ST_SHOW ssh = new ST_SHOW();
-        ssh.setVisible(true);
-        this.setVisible(false);
+        try {
+            // Show Work BUTTON
+            ST_SHOW ssh = new ST_SHOW();
+            ssh.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(ST_Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -175,5 +232,6 @@ public class ST_Home extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

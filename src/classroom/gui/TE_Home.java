@@ -5,6 +5,12 @@
  */
 package classroom.gui;
 
+import classroom.database.ConnectionDB;
+import classroom.modal.Student;
+import classroom.modal.Teacher;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,14 +21,43 @@ import javax.swing.JOptionPane;
  * @author Flukebregas
  */
 public class TE_Home extends javax.swing.JFrame {
-
+    
+    public static Teacher tch;
+    private int count[] = new int[4];
     /**
      * Creates new form TH_Home
      */
-    public TE_Home() {
+    public TE_Home(Teacher tc) throws SQLException {
         initComponents();
+        this.tch = tc;
+        this.jLabel3.setText("Hi, " + tch.getName());
+        this.jLabel2.setText("WORK: "+ countW("all") + 
+                             ", UNSENT: "+countW("unsent")+
+                             ", PENDING: "+countW("pending")+
+                             ", APPROVE : "+countW("approve"));
     }
-
+    
+    private int countW(String command) throws SQLException{
+        int count = 0;
+        Connection tcud = ConnectionDB.getConnection();
+        PreparedStatement pps;
+        if (command.equals("all")) {
+            pps = tcud.prepareStatement("select * from Work where tch=?");
+            pps.setInt(1, TE_Home.tch.getId());
+        }else{
+            pps = tcud.prepareStatement("select * from Work where tch=? and status=?");
+            pps.setInt(1, TE_Home.tch.getId());
+            if(command.equals("unsent")) pps.setInt(2, 0);
+            else if(command.equals("pending")) pps.setInt(2, 1);
+            else pps.setInt(2, 2);
+        }
+        ResultSet result = pps.executeQuery();
+        while (result.next()) {
+            count++;
+        }
+        tcud.close();
+        return count;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,7 +67,6 @@ public class TE_Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -41,36 +75,30 @@ public class TE_Home extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-
-        jButton1.setText("SENDWORK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton8 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Teacher Home");
-        setPreferredSize(new java.awt.Dimension(350, 350));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setText("'TEACHER'");
 
-        jButton2.setText("CREATEWORK");
+        jButton2.setText("CREATE WORK");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("CHECKWORK");
+        jButton3.setText("CHECK WORK");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setText("SHOWWORK");
+        jButton4.setText("SHOW WORK");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -84,7 +112,7 @@ public class TE_Home extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("REMOVEWORK");
+        jButton6.setText("REMOVE WORK");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -92,39 +120,64 @@ public class TE_Home extends javax.swing.JFrame {
         });
 
         jButton7.setText("ANALYTICS");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("HI' TEACHER");
+
+        jButton8.setText("SHOW STUDENT");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel2.setText("WORK: 123 UNSENT: 56 PENDING: 10 APPROVE : 57");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(85, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(76, 76, 76))
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addComponent(jLabel1)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton8))
                 .addGap(4, 4, 4)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -135,16 +188,11 @@ public class TE_Home extends javax.swing.JFrame {
                 .addComponent(jButton7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
@@ -152,6 +200,7 @@ public class TE_Home extends javax.swing.JFrame {
             TE_Create tc = new TE_Create();
             tc.setVisible(true);
             this.setVisible(false);
+            
         } catch (SQLException ex) {
             Logger.getLogger(TE_Home.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -159,10 +208,15 @@ public class TE_Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        TE_Check tc = new TE_Check();
-        tc.setVisible(true);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            TE_Check tc = new TE_Check();
+            tc.setVisible(true);
+            this.setVisible(false);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TE_Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -174,20 +228,52 @@ public class TE_Home extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(TE_Home.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-
-
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showConfirmDialog(null, "Are you sure ?");
-        System.exit(0);
+        String message = " Are you sure ? ";
+        String title = "LOGOUT";
+        int chk = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.WARNING_MESSAGE , JOptionPane.YES_NO_OPTION);
+        if (chk == JOptionPane.YES_OPTION) {
+            Classroom cs = new Classroom();
+            cs.setVisible(true);
+            this.setVisible(false);
+        }else{
+            
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:ST_Home sh = new ST_Home();
+            TE_Remove tr = new TE_Remove();
+            tr.setVisible(true);
+            this.setVisible(false);
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Stay Developing :3 .");
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:ST_Home sh = new ST_Home();
+            TE_ShowS tr = new TE_ShowS();
+            tr.setVisible(true);
+            this.setVisible(false);
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,20 +306,21 @@ public class TE_Home extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TE_Home().setVisible(true);
+            //    new TE_Home().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

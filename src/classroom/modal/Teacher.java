@@ -34,7 +34,6 @@ public class Teacher extends Person {
                 + "(?,?,?,?,?,?,?)");
         ck.setString(1, name);
         ResultSet ck_result = ck.executeQuery();
-
         if (!(ck_result.next())) {
             ArrayList<Student> list = Student.getAllStudent();
             for (Student std : list) {
@@ -48,9 +47,10 @@ public class Teacher extends Person {
                 ps.setInt(7, std.id);
                 ps.executeUpdate();
             }
+            conn.close();
             return " Create work : Complete";
         }
-
+        conn.close();
         return " Create work : False";
     }
 
@@ -60,6 +60,7 @@ public class Teacher extends Person {
         pps.setInt(1, score);
         pps.setInt(2, workid);
         pps.executeUpdate();
+        tcud.close();
         
     }
     
@@ -79,16 +80,18 @@ public class Teacher extends Person {
         while (result.next()){
             listWork.add(new Work(result.getInt("id")));
         }
+        tcud.close();
         return listWork;
         
     }
     
-    public void removeWork(int id) throws SQLException {
+    public void removeWork(String name) throws SQLException {
         Connection tcud = ConnectionDB.getConnection();
-        PreparedStatement pps = tcud.prepareStatement("delete from Work where tch =? and id = ?");
+        PreparedStatement pps = tcud.prepareStatement("delete from Work where tch =? and name = ?");
         pps.setInt(1, this.getId());
-        pps.setInt(2, id);
+        pps.setString(2, name);
         pps.executeUpdate();
+        tcud.close();
     }
     
 }

@@ -5,6 +5,15 @@
  */
 package classroom.gui;
 
+import classroom.database.ConnectionDB;
+import classroom.modal.Work;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author KS
@@ -14,8 +23,14 @@ public class TE_Check_Each extends javax.swing.JFrame {
     /**
      * Creates new form TE_CHECK_EACH
      */
-    public TE_Check_Each() {
+    public Work work;
+
+    public TE_Check_Each(Work w) {
+        this.work = w;
         initComponents();
+        this.jLabel5.setText(work.getName());
+        this.jLabel6.setText(work.getDesc());
+        this.jLabel7.setText(work.getAnswer());
     }
 
     /**
@@ -53,10 +68,12 @@ public class TE_Check_Each extends javax.swing.JFrame {
         jLabel3.setText("Description :");
 
         jLabel6.setText("jLabel6");
+        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jLabel4.setText("Answer :");
 
         jLabel7.setText("jLabel7");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jLabel8.setText("POINT :");
 
@@ -90,10 +107,10 @@ public class TE_Check_Each extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(24, 24, 24)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -108,11 +125,11 @@ public class TE_Check_Each extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel7)
                                                 .addGroup(layout.createSequentialGroup()
                                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabel9)))
+                                                    .addComponent(jLabel9))
+                                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGap(0, 0, Short.MAX_VALUE))))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(31, 31, 31)
@@ -134,14 +151,14 @@ public class TE_Check_Each extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addGap(64, 64, 64)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,42 +178,45 @@ public class TE_Check_Each extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            int check = 0;
-            if (this.nameText.getText().equalsIgnoreCase("") || this.desText.getText().equalsIgnoreCase("") || Integer.decode(this.nunStudent.getText()) == 0) {
-                JOptionPane.showMessageDialog(null, "Enter Text Fields or don't have student this your class");
-            }
-            for (int i = 1; i <= Integer.decode(this.nunStudent.getText()); i++) {
-                Connection conn = ConnectionDB.getConnection();
-                PreparedStatement ps = conn.prepareStatement("insert into classroom.work(name,description,answer,status,score,tch,std) values(?,?,?,?,?,?,?)");
-                ps.setString(1, this.nameText.getText());
-                ps.setString(2, this.desText.getText());
-                ps.setString(3, null);
-                ps.setInt(4, 0);
-                ps.setInt(5, 0);
-                ps.setInt(6, userId);
-                ps.setInt(7, 0);
-                check = ps.executeUpdate();
-            }
-            if (check == 1) {
-                JOptionPane.showMessageDialog(null, "Add work completed.");
-                TE_Home sh = new TE_Home();
-                sh.setVisible(true);
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Error.");
-            }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(TE_Create.class.getName()).log(Level.SEVERE, null, ex);
+        if (Integer.parseInt(this.jTextField1.getText()) < 0 || Integer.parseInt(this.jTextField1.getText()) > 10) {
+            JOptionPane.showMessageDialog(null, "Please Enter 0-10 Only.");
+        } else {
+            String message = " Are you sure ? ";
+            String title = "CONFIRM SEND WORK";
+            int chk = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            if (chk == JOptionPane.YES_OPTION) {
+                System.out.println("YES");
+                try {
+                    Connection conn = ConnectionDB.getConnection();
+                    PreparedStatement ps = conn.prepareStatement("update Work SET status = 2 , score = ? where id = ?");
+                    ps.setString(1, this.jTextField1.getText());
+                    ps.setInt(2, work.getId());
+                    ps.executeUpdate();
+                    conn.close();
+                    // redirect
+                    TE_Home sh = new TE_Home(TE_Home.tch);
+                    sh.setVisible(true);
+                    this.setVisible(false);
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                //blank   
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        TE_Home tc = new TE_Home();
-        tc.setVisible(true);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            TE_Home tc = new TE_Home(TE_Home.tch);
+            tc.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(TE_Check_Each.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -230,7 +250,7 @@ public class TE_Check_Each extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TE_Check_Each().setVisible(true);
+                //    new TE_Check_Each().setVisible(true);
             }
         });
     }

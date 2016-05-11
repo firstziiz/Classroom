@@ -6,13 +6,12 @@
 package classroom.gui;
 
 import classroom.database.ConnectionDB;
-import classroom.modal.Person;
+import classroom.modal.Student;
 import classroom.modal.Work;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -22,16 +21,15 @@ import javax.swing.table.TableModel;
 
 /**
  *
- * @author Flukebregas
+ * @author KS
  */
-public class TE_SHOW extends javax.swing.JFrame {
+public class TE_ShowS extends javax.swing.JFrame {
 
-    ArrayList<Work> alWork = new ArrayList<Work>();
-
+    ArrayList<Student> alWork = new ArrayList<Student>();
     /**
-     * Creates new form TE_SEE
+     * Creates new form TE_ShowS
      */
-    public TE_SHOW() throws SQLException {
+    public TE_ShowS() throws SQLException {
         initComponents();
         showTable();
     }
@@ -41,36 +39,50 @@ public class TE_SHOW extends javax.swing.JFrame {
         Connection tcud = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
         PreparedStatement pps;
-        pps = tcud.prepareStatement("select * from Work where tch=?");
-        pps.setInt(1,TE_Home.tch.getId());
+        pps = tcud.prepareStatement("select * from Person where position='STUDENT'");
         ResultSet result = pps.executeQuery();
         while (result.next()) {
-            alWork.add(new Work(result.getInt("id")));
+            alWork.add(new Student(result.getString("user")));
         }
 
         Vector vec = new Vector();
+        vec.add("Username");
         vec.add("Name");
-        vec.add("Description");
-        vec.add("Answer");
-        vec.add("Status");
-        vec.add("Score");
-        vec.add("Assign For");
+        vec.add("Unsent");
+        vec.add("Pending");
+        vec.add("Approve");
+
         TableModel model = new DefaultTableModel(vec, alWork.size());
         this.jTable1.setModel(model);
 
         for (int i = 0; i < alWork.size(); i++) {
-            this.jTable1.setValueAt(alWork.get(i).getName(), i, 0);
-            this.jTable1.setValueAt(alWork.get(i).getDesc(), i, 1);
-            this.jTable1.setValueAt(alWork.get(i).getAnswer(), i, 2);
-            
-            if(alWork.get(i).getStatus() == 0) this.jTable1.setValueAt("Unsent", i, 3);
-            else if(alWork.get(i).getStatus() == 1) this.jTable1.setValueAt("Pending", i, 3);
-            else this.jTable1.setValueAt("Approved", i, 3);
-            
-            this.jTable1.setValueAt(alWork.get(i).getScore(), i, 4);
-            this.jTable1.setValueAt(Person.getNameByID(alWork.get(i).getStd()), i, 5);
+            this.jTable1.setValueAt(alWork.get(i).getUser(), i, 0);
+            this.jTable1.setValueAt(alWork.get(i).getName(), i, 1);
+            this.jTable1.setValueAt(countWork(alWork.get(i),"unsent"),i,2);
+            this.jTable1.setValueAt(countWork(alWork.get(i),"pending"),i,3);
+            this.jTable1.setValueAt(countWork(alWork.get(i),"approve"),i,4);
+
         }
         tcud.close();
+    }
+    
+    public int countWork(Student std,String command) throws SQLException{
+        int count = 0;
+        Connection tcud = ConnectionDB.getConnection();
+        PreparedStatement pps;
+        pps = tcud.prepareStatement("select * from Work where tch=? and std=? and status=?");
+        pps.setInt(1, TE_Home.tch.getId());
+        pps.setInt(2, std.getId());
+        if(command.equals("unsent")) pps.setInt(3, 0);
+        else if(command.equals("pending")) pps.setInt(3, 1);
+        else pps.setInt(3, 2);
+        
+        ResultSet result = pps.executeQuery();
+        while (result.next()) {
+            count++;
+        }
+        tcud.close();
+        return count;
     }
 
     /**
@@ -82,21 +94,15 @@ public class TE_SHOW extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel2.setText("CREATEWORK");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Show Work");
-        setPreferredSize(new java.awt.Dimension(600, 450));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel3.setText("'SHOW WORK'");
+        jLabel3.setText("'SHOW STUDENT'");
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -126,16 +132,15 @@ public class TE_SHOW extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(159, 159, 159))
+                .addGap(146, 146, 146))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,7 +164,7 @@ public class TE_SHOW extends javax.swing.JFrame {
             th.setVisible(true);
             this.setVisible(false);
         } catch (SQLException ex) {
-            Logger.getLogger(TE_SHOW.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TE_ShowS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -180,34 +185,26 @@ public class TE_SHOW extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TE_SHOW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_ShowS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TE_SHOW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_ShowS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TE_SHOW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_ShowS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TE_SHOW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_ShowS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new TE_SHOW().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(TE_SHOW.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                new TE_ShowS().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

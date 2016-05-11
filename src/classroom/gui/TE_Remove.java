@@ -6,7 +6,6 @@
 package classroom.gui;
 
 import classroom.database.ConnectionDB;
-import classroom.modal.Person;
 import classroom.modal.Work;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,33 +15,33 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
  *
- * @author Flukebregas
+ * @author KS
  */
-public class ST_SEND extends javax.swing.JFrame {
+public class TE_Remove extends javax.swing.JFrame {
+
+    ArrayList<Work> alWork = new ArrayList<Work>();
 
     /**
-     * Creates new form ST_Sendwork
+     * Creates new form TE_Remove
      */
-    
-    ArrayList<Work> alWork = new ArrayList<Work>();
-    
-    public ST_SEND() throws SQLException {
+    public TE_Remove() throws SQLException {
         initComponents();
         showTable();
     }
-    
+
     public void showTable() throws SQLException {
 
         Connection tcud = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
         PreparedStatement pps;
-        pps = tcud.prepareStatement("select * from Work where std=? and status=0");
-        pps.setInt(1, ST_Home.std.getId());
+        pps = tcud.prepareStatement("select * from Work where tch=? and std=1");
+        pps.setInt(1, TE_Home.tch.getId());
         ResultSet result = pps.executeQuery();
         while (result.next()) {
             alWork.add(new Work(result.getInt("id")));
@@ -51,24 +50,14 @@ public class ST_SEND extends javax.swing.JFrame {
         Vector vec = new Vector();
         vec.add("Name");
         vec.add("Description");
-        vec.add("Answer");
-        vec.add("Status");
-        vec.add("Score");
-        vec.add("Assign By");
+
         TableModel model = new DefaultTableModel(vec, alWork.size());
         this.jTable1.setModel(model);
 
         for (int i = 0; i < alWork.size(); i++) {
             this.jTable1.setValueAt(alWork.get(i).getName(), i, 0);
             this.jTable1.setValueAt(alWork.get(i).getDesc(), i, 1);
-            this.jTable1.setValueAt(alWork.get(i).getAnswer(), i, 2);
-            
-            if(alWork.get(i).getStatus() == 0) this.jTable1.setValueAt("Unsent", i, 3);
-            else if(alWork.get(i).getStatus() == 1) this.jTable1.setValueAt("Pending", i, 3);
-            else this.jTable1.setValueAt("Approved", i, 3);
-            
-            this.jTable1.setValueAt(alWork.get(i).getScore(), i, 4);
-            this.jTable1.setValueAt(Person.getNameByID(alWork.get(i).getTch()), i, 5);
+
         }
         tcud.close();
     }
@@ -82,28 +71,16 @@ public class ST_SEND extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setText("STUDENT");
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Send Work");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel2.setText("'SEND WORK'");
-
-        jButton2.setText("BACK");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel3.setText("'REMOVE WORK'");
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -120,10 +97,18 @@ public class ST_SEND extends javax.swing.JFrame {
         jTable1.setPreferredSize(new java.awt.Dimension(2000, 2000));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("SELECT WORK");
+        jButton1.setText("Back");
+        jButton1.setBorderPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Remove Work");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -132,59 +117,66 @@ public class ST_SEND extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(178, 178, 178))))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(146, 146, 146))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            // TODO add your handling code here:TE_Home th = new TE_Home();
-            
-            ST_Home sh = new ST_Home(ST_Home.std);
-            
-            sh.setVisible(true);
+            // TODO add your handling code here:
+            TE_Home th = new TE_Home(TE_Home.tch);
+            th.setVisible(true);
             this.setVisible(false);
         } catch (SQLException ex) {
-            Logger.getLogger(ST_SEND.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TE_Remove.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-//        this.jTable1.getSelectedRow();
-        
-        ST_SEND_Each sse = new ST_SEND_Each(alWork.get(this.jTable1.getSelectedRow()));
-        sse.setVisible(true);
-        this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Work w = alWork.get(this.jTable1.getSelectedRow());
+        try {
+            String message = " Do you want to remove this work ? ";
+            String title = "CONFIRM REMOVE WORK";
+            int chk = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            if (chk == JOptionPane.YES_OPTION) {
+                TE_Home.tch.removeWork(w.getName());
+                JOptionPane.showMessageDialog(null, "Remove work completed.");
+                TE_Home sh = new TE_Home(TE_Home.tch);
+                sh.setVisible(true);
+                this.setVisible(false);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TE_Remove.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,24 +195,23 @@ public class ST_SEND extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ST_SEND.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_Remove.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ST_SEND.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_Remove.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ST_SEND.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_Remove.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ST_SEND.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TE_Remove.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new ST_SEND().setVisible(true);
+                    new TE_Remove().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ST_SEND.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TE_Remove.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -229,8 +220,7 @@ public class ST_SEND extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

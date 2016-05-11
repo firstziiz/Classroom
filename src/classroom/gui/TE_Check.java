@@ -5,6 +5,20 @@
  */
 package classroom.gui;
 
+import classroom.database.ConnectionDB;
+import classroom.modal.Person;
+import classroom.modal.Work;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Flukebregas
@@ -14,8 +28,49 @@ public class TE_Check extends javax.swing.JFrame {
     /**
      * Creates new form TE_Check
      */
-    public TE_Check() {
+    
+    ArrayList<Work> alWork = new ArrayList<Work>();
+    
+    public TE_Check() throws SQLException {
         initComponents();
+        showTable();
+    }
+    
+    public void showTable() throws SQLException {
+
+        Connection tcud = ConnectionDB.getConnection();
+        ArrayList<Work> listWork = new ArrayList<Work>();
+        PreparedStatement pps;
+        pps = tcud.prepareStatement("select * from Work where tch=? and status=1");
+        pps.setInt(1, TE_Home.tch.getId());
+        ResultSet result = pps.executeQuery();
+        while (result.next()) {
+            alWork.add(new Work(result.getInt("id")));
+        }
+        Vector vec = new Vector();
+        vec.add("Name");
+        vec.add("Description");
+        vec.add("Answer");
+        vec.add("Status");
+        vec.add("Score");
+        vec.add("Assign By");
+        TableModel model = new DefaultTableModel(vec, alWork.size());
+        this.jTable1.setModel(model);
+
+        for (int i = 0; i < alWork.size(); i++) {
+            this.jTable1.setValueAt(alWork.get(i).getName(), i, 0);
+            this.jTable1.setValueAt(alWork.get(i).getDesc(), i, 1);
+            this.jTable1.setValueAt(alWork.get(i).getAnswer(), i, 2);
+            
+            if(alWork.get(i).getStatus() == 0) this.jTable1.setValueAt("Unsent", i, 3);
+            else if(alWork.get(i).getStatus() == 1) this.jTable1.setValueAt("Pending", i, 3);
+            else this.jTable1.setValueAt("Approved", i, 3);
+            
+            this.jTable1.setValueAt(alWork.get(i).getScore(), i, 4);
+            this.jTable1.setValueAt(Person.getNameByID(alWork.get(i).getTch()), i, 5);
+            
+        }
+        tcud.close();
     }
 
     /**
@@ -94,7 +149,7 @@ public class TE_Check extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -106,14 +161,20 @@ public class TE_Check extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:TE_Home th = new TE_Home();
-        TE_Home sh = new TE_Home();
-        sh.setVisible(true);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:TE_Home th = new TE_Home();
+            TE_Home sh = new TE_Home(TE_Home.tch);
+            sh.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(TE_Check.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        TE_Check_Each sse = new TE_Check_Each(alWork.get(this.jTable1.getSelectedRow()));
+        sse.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -146,7 +207,7 @@ public class TE_Check extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TE_Check().setVisible(true);
+                // new TE_Check().setVisible(true);
             }
         });
     }

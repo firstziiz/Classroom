@@ -152,22 +152,24 @@ public class Classroom extends javax.swing.JFrame {
                 pass = rs.getString("pass");
                 position = rs.getString("position");
             }
+            conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Classroom.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         if(this.AddUser.getText().equalsIgnoreCase("") || this.AddPass.getText().equalsIgnoreCase("")){
-            JOptionPane.showMessageDialog(null, "Enter TextField.");
+            JOptionPane.showMessageDialog(null, "Please Enter Correct User and Password.");
         }
         else {
               if (pass.equals(String.valueOf(AddPass.getPassword()))) {
             if (position.equalsIgnoreCase("teacher")) {
                 try {
                     Teacher tch = new Teacher(user);
-                    TE_Home th = new TE_Home();
+                    TE_Home th = new TE_Home(tch);
                     th.setVisible(true);
                     this.setVisible(false);
                 } catch (SQLException ex) {
                     // Exception
+                    ex.printStackTrace();
                 }
             } else  {
                 try {
@@ -177,6 +179,7 @@ public class Classroom extends javax.swing.JFrame {
                     this.setVisible(false);
                 } catch (SQLException ex) {
                     // Exception
+                    ex.printStackTrace();
                 }
             }
         }

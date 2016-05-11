@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author KS
  */
-public class Classroom {
+public class Classroom_TEXT {
 
     /**
      * @param args the command line arguments
@@ -158,8 +158,7 @@ public class Classroom {
                         System.out.print("Enter work name : ");
                         String workName = sc.next();
                         System.out.print("Enter descrition of work : ");
-                        sc.next();
-                        String workDesc = sc.nextLine();
+                        String workDesc = sc.next();
                         
                         // Confirm
                         System.out.println("------- Confirm Work -------");
@@ -227,7 +226,7 @@ public class Classroom {
                             }
                         System.out.print("------- Select ID of Work : ");
                         int select = sc.nextInt();
-                         tch.removeWork(list.get(select-1).getId());
+                         tch.removeWork(list.get(select-1).getName());
                         System.out.println("Remove Work Complete, You can check your work on 'Show Work' function.");
                     }
                     // 5 : Analyrics Board

@@ -32,7 +32,7 @@ public class Student extends Person {
         while (result.next()) {
             listStd.add(new Student(result.getString("user")));
         }
-
+        conn.close();
         return listStd;
     }
     
@@ -54,6 +54,7 @@ public class Student extends Person {
         while (result.next()) {
             listWork.add(new Work(result.getInt("id")));
         }
+        conn.close();
         return listWork;
     }
     
@@ -63,5 +64,7 @@ public class Student extends Person {
         ps.setString(1, answer);
         ps.setInt(2, workid);
         ps.executeUpdate();
+        conn.close();
     }
+    
 }

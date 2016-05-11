@@ -5,6 +5,21 @@
  */
 package classroom.gui;
 
+import classroom.database.ConnectionDB;
+import classroom.modal.Person;
+import classroom.modal.Student;
+import classroom.modal.Work;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Flukebregas
@@ -14,8 +29,50 @@ public class ST_SHOW extends javax.swing.JFrame {
     /**
      * Creates new form ST_Checkwork
      */
-    public ST_SHOW() {
+    
+    ArrayList<Work> alWork = new ArrayList<Work>();
+    
+    
+    public ST_SHOW() throws SQLException {
         initComponents();
+        showTable();
+    }
+    
+    public void showTable() throws SQLException {
+
+        Connection conn = ConnectionDB.getConnection();
+        ArrayList<Work> listWork = new ArrayList<Work>();
+        PreparedStatement pps;
+        pps = conn.prepareStatement("select * from Work where std=?");
+        pps.setInt(1, ST_Home.std.getId());
+        ResultSet result = pps.executeQuery();
+        while (result.next()) {
+            alWork.add(new Work(result.getInt("id")));
+        }
+
+        Vector vec = new Vector();
+        vec.add("Name");
+        vec.add("Description");
+        vec.add("Answer");
+        vec.add("Status");
+        vec.add("Score");
+        vec.add("Assign By");
+        TableModel model = new DefaultTableModel(vec, alWork.size());
+        this.jTable1.setModel(model);
+
+        for (int i = 0; i < alWork.size(); i++) {
+            this.jTable1.setValueAt(alWork.get(i).getName(), i, 0);
+            this.jTable1.setValueAt(alWork.get(i).getDesc(), i, 1);
+            this.jTable1.setValueAt(alWork.get(i).getAnswer(), i, 2);
+            
+            if(alWork.get(i).getStatus() == 0) this.jTable1.setValueAt("Unsent", i, 3);
+            else if(alWork.get(i).getStatus() == 1) this.jTable1.setValueAt("Pending", i, 3);
+            else this.jTable1.setValueAt("Approved", i, 3);
+            
+            this.jTable1.setValueAt(alWork.get(i).getScore(), i, 4);
+            this.jTable1.setValueAt(Person.getNameByID(alWork.get(i).getTch()), i, 5);
+        }
+        conn.close();
     }
 
     /**
@@ -28,20 +85,15 @@ public class ST_SHOW extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Show Work");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel2.setText("SHOWWORK");
-
-        jLabel1.setText("SELECT : ");
-
-        jButton1.setText("SEND");
+        jLabel2.setText("'SHOW WORK'");
 
         jButton2.setText("BACK");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -50,53 +102,66 @@ public class ST_SHOW extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setPreferredSize(new java.awt.Dimension(2000, 2000));
+        jScrollPane1.setViewportView(jTable1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(166, 166, 166)
                 .addComponent(jLabel2)
-                .addGap(0, 61, Short.MAX_VALUE))
+                .addContainerGap(171, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addGap(116, 116, 116))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                .addComponent(jButton2)
+                .addGap(22, 22, 22))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(21, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 205, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addGap(32, 32, 32))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 367, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(14, 14, 14))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(50, 50, 50)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(55, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:TE_Home th = new TE_Home();
-        ST_Home sh = new ST_Home(ST_Home.std);
-        sh.setVisible(true);
-        this.setVisible(false);
-
+        try {
+            // TODO add your handling code here:TE_Home th = new TE_Home();
+            ST_Home sh = new ST_Home(ST_Home.std);
+            sh.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(ST_SHOW.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -133,16 +198,19 @@ public class ST_SHOW extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ST_SHOW().setVisible(true);
+                try {
+                    new ST_SHOW().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ST_SHOW.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

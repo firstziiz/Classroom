@@ -36,6 +36,7 @@ public class Person {
             this.name = rs.getString("name");
             this.position = rs.getString("position");
         }
+        conn.close();
     }
     
     // [STATIC] Check A Person in a database, but has return 'true'
@@ -45,6 +46,7 @@ public class Person {
         ps.setString(1, user);
         ps.setString(2, password);
         ResultSet rs = ps.executeQuery();
+        conn.close();
         return rs.next();
     }
     
@@ -64,6 +66,7 @@ public class Person {
             ps.setString(3, personName);
             ps.setString(4, position);
             ps.executeUpdate();
+            conn.close();
         }        
     }
     
@@ -74,10 +77,25 @@ public class Person {
         ps.setString(1, user);
         ResultSet result = ps.executeQuery();
         result.next();
+        conn.close();
         return result.getString("position");
 	
 	
     }
+    
+    public static String getNameByID(int id) throws SQLException{
+        String name = null;
+        Connection conn = ConnectionDB.getConnection();
+        PreparedStatement ps = conn.prepareStatement("select name from Person where id = ?");
+        ps.setInt(1, id);
+        ResultSet result = ps.executeQuery();
+        while (result.next()) {
+            name = result.getString("name");
+        }
+        conn.close();
+        return name;
+    }
+    
     // GET and SET
     public int getId() {
         return id;

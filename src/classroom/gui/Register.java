@@ -235,7 +235,7 @@ public class Register extends javax.swing.JFrame {
                 Classroom hm = new Classroom();
                 hm.setVisible(true);
                 this.dispose();
-
+                
             }
 
         } catch (SQLException ex) {

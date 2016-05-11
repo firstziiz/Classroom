@@ -44,7 +44,7 @@ public class Work {
             this.answer = rs.getString("answer");
             this.path = rs.getString("path");
         }
-
+        conn.close();
     }
     // [STATIC] Get All Student on Arraylist
     public static ArrayList<Work> getAllStudent() throws SQLException {
@@ -55,6 +55,7 @@ public class Work {
         while (result.next()) {
             listWrk.add(new Work(result.getInt("id")));
         }
+        conn.close();
         return listWrk;
     }
 

@@ -6,11 +6,13 @@
 package classroom.gui;
 
 import classroom.database.ConnectionDB;
+import classroom.modal.Student;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -47,6 +49,7 @@ public class TE_Create extends javax.swing.JFrame {
             numStudent++;
         }
         this.nunStudent.setText(String.valueOf(numStudent));
+        conn.close();
     }
 
     public void getToDB(String sql) throws SQLException {
@@ -175,33 +178,53 @@ public class TE_Create extends javax.swing.JFrame {
     }//GEN-LAST:event_nameTextActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         try {
             int check = 0;
             // TODO add your handling code here:
             if (this.nameText.getText().equalsIgnoreCase("") || this.desText.getText().equalsIgnoreCase("") || Integer.decode(this.nunStudent.getText()) == 0) {
                 JOptionPane.showMessageDialog(null, "Enter Text Fields or don't have student this your class");
             }
-            for (int i = 1; i <= Integer.decode(this.nunStudent.getText()); i++) {
-                Connection conn = ConnectionDB.getConnection();
-                PreparedStatement ps = conn.prepareStatement("insert into classroom.work(name,description,answer,status,score,tch,std) values(?,?,?,?,?,?,?)");
-                ps.setString(1, this.nameText.getText());
-                ps.setString(2, this.desText.getText());
-                ps.setString(3, null);
-                ps.setInt(4, 0);
-                ps.setInt(5, 0);
-                ps.setInt(6, userId);
-                ps.setInt(7, 0);
-                check = ps.executeUpdate();
+            Connection conn = ConnectionDB.getConnection();
+            PreparedStatement ck = conn.prepareStatement("select name"
+                    + " from Work where name=?");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Work"
+                    + "(name, description, status, answer, score, tch ,std) VALUES"
+                    + "(?,?,?,?,?,?,?)");
+            ck.setString(1, name);
+            ResultSet ck_result = ck.executeQuery();
+            String message = " Are you sure ? ";
+            String title = "CONFIRM SEND WORK";
+            int chk = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            if (chk == JOptionPane.YES_OPTION) {
+                if (!(ck_result.next())) {
+                    ArrayList<Student> list = Student.getAllStudent();
+                    for (Student std : list) {
+                        System.out.println(std);
+                        ps.setString(1, this.nameText.getText());
+                        ps.setString(2, this.desText.getText());
+                        ps.setInt(3, 0);
+                        ps.setString(4, "");
+                        ps.setInt(5, 0);
+                        ps.setInt(6, TE_Home.tch.getId());
+                        ps.setInt(7, std.getId());
+                        check = ps.executeUpdate();
+                    }
+                    if (check == 1) {
+                        conn.close();
+                        JOptionPane.showMessageDialog(null, "Add work completed.");
+                        TE_Home sh = new TE_Home(TE_Home.tch);
+                        sh.setVisible(true);
+                        this.setVisible(false);
+                    } else {
+                        conn.close();
+                        JOptionPane.showMessageDialog(null, "Error.");
+                    }
+                } else {
+                    // Blank
+                }
+                conn.close();
             }
-            if (check == 1) {
-                JOptionPane.showMessageDialog(null, "Add work completed.");
-                TE_Home sh = new TE_Home();
-                sh.setVisible(true);
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Error.");
-            }
-
         } catch (SQLException ex) {
             Logger.getLogger(TE_Create.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -209,10 +232,14 @@ public class TE_Create extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        TE_Home tc = new TE_Home();
-        tc.setVisible(true);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            TE_Home tc = new TE_Home(TE_Home.tch);
+            tc.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(TE_Create.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
