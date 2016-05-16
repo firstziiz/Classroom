@@ -67,4 +67,31 @@ public class Student extends Person {
         conn.close();
     }
     
+    public int getAllScore() throws SQLException{
+        Connection conn = ConnectionDB.getConnection();
+           int sum = 0;
+           PreparedStatement ck;
+           ck = conn.prepareStatement("select * from Work where std = ? and status = 2");
+           ck.setInt(1, id);
+           ResultSet result = ck.executeQuery();
+           while (result.next()) {
+               sum += new Work(result.getInt("id")).getScore();
+           }
+           conn.close();
+           return sum;   
+    }
+    public int countWorkApprove() throws SQLException{
+        Connection conn = ConnectionDB.getConnection();
+           int count = 0;
+           PreparedStatement ck;
+           ck = conn.prepareStatement("select * from Work where std = ? and status = 2");
+           ck.setInt(1, id);
+           ResultSet result = ck.executeQuery();
+           while (result.next()) {
+               count++;
+           }
+           conn.close();
+           return count;   
+    }
+    
 }
