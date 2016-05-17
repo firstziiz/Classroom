@@ -39,7 +39,7 @@ public class TE_Remove extends javax.swing.JFrame {
         Connection tcud = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
         PreparedStatement pps;
-        pps = tcud.prepareStatement("select * from Work where tch=? and std=1");
+        pps = tcud.prepareStatement("select * from Work where tch=? and std=9");
         pps.setInt(1, TE_Home.tch.getId());
         ResultSet result = pps.executeQuery();
         while (result.next()) {
