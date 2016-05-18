@@ -78,7 +78,7 @@ public class TE_Analytics extends javax.swing.JFrame {
         Connection tcud = ConnectionDB.getConnection();
         ArrayList<Work> listWork = new ArrayList<Work>();
         PreparedStatement pps;
-        pps = tcud.prepareStatement("select * from Work where tch=? and std=9");
+        pps = tcud.prepareStatement("select * from Work where tch=? and std=16");
         pps.setInt(1, TE_Home.tch.getId());
         ResultSet result = pps.executeQuery();
         while (result.next()) {
