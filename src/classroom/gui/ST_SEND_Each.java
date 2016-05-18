@@ -30,9 +30,24 @@ public class ST_SEND_Each extends javax.swing.JFrame {
         this.work = w;
         initComponents();
         this.jLabel5.setText(work.getName());
-        this.jLabel6.setText(work.getDesc());
+        String cutDecs = cutter(work.getDesc());
+        this.jTextArea2.setEditable(false);
+        this.jTextArea2.setText(cutDecs);
     }
-
+    
+    public String cutter(String cut){
+        String cutted[] = cut.split("");
+        for (int i = 0; i < cutted.length; i++) {
+            if (i > 19 && i % 20 == 0) {
+                cutted[i]+="\n";
+            }
+        }
+        String res = "";
+        for (int i = 0; i < cutted.length; i++) {
+            res += cutted[i];
+        }
+        return res;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,8 +59,8 @@ public class ST_SEND_Each extends javax.swing.JFrame {
 
         jButton2 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jTextArea2 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
@@ -63,11 +78,7 @@ public class ST_SEND_Each extends javax.swing.JFrame {
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 330, 110, 40));
 
         jLabel5.setText("jLabel5");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 86, 134, 20));
-
-        jLabel6.setText("jLabel6");
-        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 134, 184, 70));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 86, 160, 20));
 
         jButton1.setBackground(new Color(0,0,0,0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/classroom/gui/deco/sub.png"))); // NOI18N
@@ -78,11 +89,15 @@ public class ST_SEND_Each extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 100, 50));
 
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        getContentPane().add(jTextArea2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 160, 60));
+
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 189, 184, 130));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 199, 184, 120));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/classroom/gui/deco/STSend_Each.png"))); // NOI18N
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -168,9 +183,9 @@ public class ST_SEND_Each extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 }

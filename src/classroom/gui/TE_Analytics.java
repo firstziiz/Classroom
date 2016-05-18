@@ -157,7 +157,7 @@ public class TE_Analytics extends javax.swing.JFrame {
         // Reverse | Low Score
         
         DefaultListModel model2 = new DefaultListModel();
-        for (int i = 2; i >=0 ; i--) {
+        for (int i = list.size()-1; i >= list.size()-3 ; i--) {
             model2.addElement(list.get(i).getName() + " : " + list.get(i).getAllScore()+" point.");
             
         }
@@ -197,7 +197,7 @@ public class TE_Analytics extends javax.swing.JFrame {
         // Reverse | Low Score
         
         DefaultListModel model2 = new DefaultListModel();
-        for (int i = 2; i >=0 ; i--) {
+        for (int i = list.size()-1; i >= list.size()-3 ; i--) {
             model2.addElement(list.get(i).getName() + " : " + list.get(i).countWorkApprove()+" work.");
             
         }

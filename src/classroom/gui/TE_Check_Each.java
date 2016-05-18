@@ -30,10 +30,26 @@ public class TE_Check_Each extends javax.swing.JFrame {
         this.work = w;
         initComponents();
         this.jLabel5.setText(work.getName());
-        this.jLabel6.setText(work.getDesc());
-        this.jLabel7.setText(work.getAnswer());
+        this.jTextArea2.setText(cutter(work.getDesc()));
+        this.jTextArea2.setEditable(false);
+        this.jTextArea1.setText(cutter(work.getAnswer()));
+        this.jTextArea1.setEditable(false);
+        
     }
-
+    
+    public String cutter(String cut){
+        String cutted[] = cut.split("");
+        for (int i = 0; i < cutted.length; i++) {
+            if (i > 19 && i % 20 == 0) {
+                cutted[i]+="\n";
+            }
+        }
+        String res = "";
+        for (int i = 0; i < cutted.length; i++) {
+            res += cutted[i];
+        }
+        return res;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,9 +59,9 @@ public class TE_Check_Each extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextArea1 = new javax.swing.JTextArea();
+        jTextArea2 = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -54,16 +70,16 @@ public class TE_Check_Each extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        getContentPane().add(jTextArea1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 215, 170, 70));
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        getContentPane().add(jTextArea2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 170, 70));
+
         jLabel5.setText("jLabel5");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 134, 20));
-
-        jLabel6.setText("jLabel6");
-        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 160, 70));
-
-        jLabel7.setText("jLabel7");
-        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 160, 70));
 
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -185,8 +201,8 @@ public class TE_Check_Each extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
